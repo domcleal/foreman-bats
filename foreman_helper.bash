@@ -7,6 +7,13 @@ tForemanSetupUrl() {
   FOREMAN_URL=${FOREMAN_URL:-http://yum.theforeman.org/$FOREMAN_REPO/${SYS}${OS_VERSION}/x86_64/foreman-release.rpm}
 }
 
+tForemanSetupUpgradeUrl() {
+  tSetOSVersion
+  tIsRedHatCompatible && SYS="el"
+  tIsFedoraCompatible && SYS="f"
+  FOREMAN_UPGRADE_URL=${FOREMAN_UPGRADE_URL:-http://yum.theforeman.org/$FOREMAN_UPGRADE_REPO/${SYS}${OS_VERSION}/x86_64/foreman-release.rpm}
+}
+
 tForemanSetLang() {
   # facter 1.7- fails to parse some values when non-US LANG and others are set
   # see: http://projects.puppetlabs.com/issues/12012

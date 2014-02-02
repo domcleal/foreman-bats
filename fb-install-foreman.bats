@@ -118,18 +118,6 @@ EOF
   foreman-installer --no-colors -v
 }
 
-@test "wait 10 seconds" {
-  sleep 10
-}
-
-@test "check web app is up" {
-  curl -sk "https://localhost$URL_PREFIX/users/login" | grep -q login-form
-}
-
-@test "wake up puppet agent" {
-  puppet agent -t -v
-}
-
 @test "install all compute resources" {
   packages="foreman-console foreman-libvirt foreman-vmware foreman-ovirt"
   yum info foreman-gce >/dev/null 2>&1 && packages="$packages foreman-gce"
@@ -143,24 +131,4 @@ EOF
 @test "install CLI (hammer)" {
   [ x$FOREMAN_VERSION = "x1.3" ] && skip "Only supported on 1.4+"
   tPackageInstall foreman-cli
-}
-
-@test "check smart proxy is registered" {
-  [ x$FOREMAN_VERSION = "x1.3" ] && skip "Only supported on 1.4+"
-  count=$(hammer --csv proxy list | wc -l)
-  [ $count -gt 1 ]
-}
-
-@test "check host is registered" {
-  [ x$FOREMAN_VERSION = "x1.3" ] && skip "Only supported on 1.4+"
-  hammer host info --name $(hostname -f) | egrep "Last report.*$(date +%Y/%m/%d)"
-}
-
-@test "collect important logs" {
-  tail -n100 /var/log/{apache2,httpd}/*_log /var/log/foreman{-proxy,}/*log /var/log/messages > /root/last_logs || true
-  foreman-debug -q -d /root/foreman-debug || true
-  if tIsRedHatCompatible; then
-    tPackageExists sos || tPackageInstall sos
-    sosreport --batch --tmp-dir=/root || true
-  fi
 }

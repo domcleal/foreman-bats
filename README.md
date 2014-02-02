@@ -33,17 +33,19 @@ specified:
   FOREMAN_REPO for the main Foreman URL
 * MODULE_PATH: override the location of modules used for installation.
 
+When using fb-upgrade-foreman.bats, the above environment variables become:
+
+* FOREMAN_UPGRADE_REPO
+* FOREMAN_UPGRADE_CUSTOM_URL
+
 Vagrant support
 ---------------
 
 A Vagrantfile is supplied with multi-OS support.  This will transfer
 foreman-bats to the VM and tests can then be executed via `vagrant ssh`:
 
-    vagrant up
-    vagrant ssh -c 'sudo /vagrant/fb-install-foreman.bats'
-       # or...
     vagrant up wheezy
-    vagrant ssh wheezy -c 'sudo /vagrant/fb-install-foreman.bats'
+    vagrant ssh wheezy -c 'sudo /vagrant/fb-install-foreman.bats; sudo /vagrant/fb-check-foreman.bats'
 
 It is also possible to test a different set of modules on all supported
 platforms:
@@ -51,5 +53,5 @@ platforms:
     git clone --recursive https://github.com/theforeman/foreman-installer local
     vagrant up
     for vm in precise squeeze wheezy f19 el6 ; do
-        vagrant ssh $vm -c 'sudo MODULE_PATH=/vagrant/local/modules /vagrant/fb-install-foreman.bats'
+        vagrant ssh $vm -c 'sudo MODULE_PATH=/vagrant/local/modules /vagrant/fb-install-foreman.bats; sudo /vagrant/fb-check-foreman.bats'
     done
