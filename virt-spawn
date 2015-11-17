@@ -152,7 +152,7 @@ done
 
 if [ $ACTION = installdeps ]; then
   echo "Installing virtualization dependencies"
-  $SUDO yum -y install openssl virt-install libguestfs libguestfs-tools util-linux sudo libxml2 fortune-mod
+  $SUDO yum -y install openssl virt-install libguestfs libguestfs-tools util-linux sudo libxml2 fortune-mod net-tools libvirt-daemon-config-network
   exit 0
 fi
 
