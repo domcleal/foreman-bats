@@ -279,3 +279,5 @@ echo " http://$FQDN"
 echo " https://$FQDN"
 echo
 type fortune &>/dev/null && fortune
+
+exit 0
